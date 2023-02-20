@@ -1,4 +1,6 @@
-import './globals.css'
+'use client';
+import './globals.css';
+import { ThemeProvider } from '@material-tailwind/react';
 
 export default function RootLayout({ children }) {
   return (
@@ -8,7 +10,9 @@ export default function RootLayout({ children }) {
         head.js. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
       */}
       <head />
-      <body>{children}</body>
+      <body>
+        <ThemeProvider>{children}</ThemeProvider>
+      </body>
     </html>
-  )
+  );
 }

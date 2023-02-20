@@ -1,91 +1,85 @@
-import Image from 'next/image'
-import { Inter } from '@next/font/google'
-import styles from './page.module.css'
+'use client';
+import { useState } from 'react';
+import { Button, Card, CardBody, CardFooter, CardHeader, Input, Typography } from '@material-tailwind/react';
+import { ButtonWithClipboard } from '@/components';
 
-const inter = Inter({ subsets: ['latin'] })
+export default function App() {
+  const [data, setData] = useState('');
+  const [destination, setDestination] = useState('');
+  const [short, setShort] = useState('');
 
-export default function Home() {
+  const onSubmit = async () => {
+    document.querySelector('#destination').setAttribute('disabled', 'disabled');
+    document.querySelector('#short').setAttribute('disabled', 'disabled');
+    const btnSubmit = document.querySelector('#btn-submit');
+    btnSubmit.setAttribute('disabled', 'disabled');
+    btnSubmit.textContent = 'Shorting...';
+    const res = await fetch('/api/short', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        short,
+        destination,
+      }),
+    });
+    const resJson = await res.json();
+    setData(resJson.data.short);
+  };
+
+  if(data.length > 0) {
+    return (
+      <div className="grid h-screen place-content-center justify-items-center">
+        <Card className="w-96">
+          <CardHeader variant="gradient" color="teal" className="mb-4 grid h-28 place-items-center">
+            <Typography variant="h3" color="white">
+              {"Your link sorted!"}
+            </Typography>
+          </CardHeader>
+          <CardBody>
+          <Input label="Shorted link" size="lg" value={`${window.location.host}/${data}`} disabled/>
+          </CardBody>
+          <CardFooter className="pt-0 flex flex-col gap-2">
+            <ButtonWithClipboard link={`${window.location.host}/${data}`} />
+            <span className="text-xs mx-auto">
+              Build by{' '}
+              <a href="https://egyyudanugraha.site" target="_blank" rel="noreferrer" className="font-medium hover:underline">
+                Yuda
+              </a>
+            </span>
+          </CardFooter>
+        </Card>
+      </div>
+    )
+  }
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-        <div className={styles.thirteen}>
-          <Image src="/thirteen.svg" alt="13" width={40} height={31} priority />
-        </div>
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://beta.nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+    <div className="grid h-screen place-content-center justify-items-center">
+      <form>
+        <Card className="w-96">
+          <CardHeader variant="gradient" color="blue" className="mb-4 grid h-28 place-items-center">
+            <Typography variant="h3" color="white">
+              {"Let's short!"}
+            </Typography>
+          </CardHeader>
+          <CardBody className="flex flex-col gap-4">
+            <Input label="Destination ex: https://example.com" size="lg" value={destination} onChange={(e) => setDestination(e.target.value)} id="destination" minLength="4" required />
+            <Input label="Short link ex: MY_LINK" size="lg" value={short} onChange={(e) => setShort(e.target.value)} id="short" minLength="4" required />
+          </CardBody>
+          <CardFooter className="pt-0 flex flex-col gap-2">
+            <Button onClick={onSubmit} variant="gradient" id="btn-submit" fullWidth>
+              Make it short!
+            </Button>
+            <span className="text-xs mx-auto">
+              Build by{' '}
+              <a href="https://egyyudanugraha.site" target="_blank" rel="noreferrer" className="font-medium hover:underline">
+                Yuda
+              </a>
+            </span>
+          </CardFooter>
+        </Card>
+      </form>
+    </div>
+  );
 }

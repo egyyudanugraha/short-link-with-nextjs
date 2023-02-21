@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { Typography } from '../../components';
 
 const getDestination = async (short) => {
-  const res = await fetch(`https://short-yuda.vercel.app/api/go/${short}`)
+  const res = await fetch(`/api/go/${short}`)
 
   return await res.json();
 }
@@ -28,6 +28,10 @@ function Page({ params: { short }}) {
       }
       setCount(prev => prev - 1);
     }, 1000);
+
+    if(error) {
+      clearTimeout(counter);
+    }
 
     return () => clearTimeout(counter)
   }, [count])

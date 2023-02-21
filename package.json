@@ -12,6 +12,7 @@
     "@material-tailwind/react": "^1.4.2",
     "@next/font": "13.1.6",
     "@prisma/client": "^4.10.1",
+    "dotenv": "^16.0.3",
     "eslint": "8.34.0",
     "eslint-config-next": "13.1.6",
     "next": "13.1.6",

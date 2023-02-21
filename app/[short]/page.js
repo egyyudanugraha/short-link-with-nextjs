@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { Typography } from '../../components';
 
 const getDestination = async (short) => {
-  const res = await fetch(`/api/go/${short}`)
+  const res = await fetch(`${process.env.URL}/api/go/${short}`)
 
   return await res.json();
 }

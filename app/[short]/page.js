@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { Typography } from '../../components';
 
 const getDestination = async (short) => {
-  const res = await fetch(`${window.location.protocol}//${window.location.host}/api/go/${short}`)
+  const res = await fetch(`https://short-yuda.vercel.app/api/go/${short}`)
 
   return await res.json();
 }
